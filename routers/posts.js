@@ -4,7 +4,7 @@ const postsController = require("../controllers/postsController.js"); /**Import 
 
 //**Rotte CRUD*/
 router.get("/", postsController.index); /**INDEX - Mostra tutti i post*/
-//router.get("/:id", postsController.show); /**SHOW - Mostra un singolo post in base all'ID*/
+router.get("/:id", postsController.show); /**SHOW - Mostra un singolo post in base all'ID*/
 //router.post("/", postsController.store); /**STORE - Crea un nuovo post*/
 //router.put("/:id", postsController.update); /**UPDATE - Modifica del post tramite ID*/
 //router.patch("/:id", postsController.modify); /**MODIFY - Modifica parziale del post tramite ID*/

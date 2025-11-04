@@ -13,22 +13,21 @@ function index(req, res) { /**Mostra tutti i post*/
   });
 }
 
-///**SHOW*/
-//function show(req, res) { /**Mostra un singolo post in base all'ID*/
-//  const id = parseInt(req.params.id); /**Recuperiamo l'ID dall'URL e lo trasformiamo in un numero*/
-//  const post = posts.find(post => post.id === id); /**Cerchiamo il post nell'array tramite ID*/
-//  
-//  if (!post) { /**Se non troviamo alcun post con quell'ID*/
-//    res.status(404); /**Imposta lo status HTTP 404*/
-//    return res.json({ /**Sempre in formato JSON*/
-//      status: 404, /**Codice errore*/
-//      error: "Not Found", /**Tipo di errore*/
-//      message: "Post non trovato" /**Messaggio d'errore*/
-//    });
-//  }
-//  
-//  res.json(post); /**Se invece esiste, restituiamo il post (sempre in formato JSON)*/
-//}
+/**SHOW*/
+function show(req, res) { /**Mostra un singolo post in base all'ID*/
+  const id = parseInt(req.params.id); /**Recuperiamo l'ID dall'URL e lo trasformiamo in un numero*/
+  const sql = "SELECT * FROM posts WHERE id = ?"; /**Query SQL con placeholder per evitare SQL Injection*/
+  
+  db.query(sql, [id], (err, results) => { /**Eseguiamo la query passando l'id come parametro*/
+    if (err)
+      return res.status(500).json({ error: "Errore nella query del database" }); /**Errore generico nel DB*/
+
+    if (results.length === 0)
+      return res.status(404).json({ error: "Post non trovato" }); /**Se il post non esiste, restituiamo errore 404*/
+
+    res.json(results[0]); /**Restituiamo il singolo post trovato in formato JSON*/
+  });
+}
 //
 ///**STORE*/
 //function store(req, res) { /**Crea un nuovo post*/
@@ -110,4 +109,4 @@ function destroy(req, res) { /**Elimina il post tramite ID*/
 }
 
 //module.exports = {index, show, store, update, modify, destroy}; /**Esportiamo tutte le funzioni*/
-module.exports = {index, destroy}; /**Esportiamo momentaneamente solo le funzioni necessarie*/
+module.exports = {index, show, destroy}; /**Esportiamo momentaneamente solo le funzioni necessarie*/
