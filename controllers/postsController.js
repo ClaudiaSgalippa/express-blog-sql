@@ -1,18 +1,16 @@
 /**CRUD*/
-const posts = require("../data/postsData.js") /**Import dell'array dei post*/
+const db = require("../data/db.js"); /**Connessione a MySQL*/
 
 /**INDEX*/
 function index(req, res) { /**Mostra tutti i post*/  
-  const tag = req.query.tag; /**Salviamo il valore del parametro "tag" dalla query string, se presente*/
+  const sql = "SELECT * FROM posts"; /**Query per prendere tutti i post dal DB*/
 
-  if (!tag) { /**Se non è stato specificato nessun tag, restituiamo tutti i post in formato JSON*/
-    return res.json(posts);
-  }
-  const filteredPosts = posts.filter(post => /**Altrimenti filtriamo i post che includono quel tag*/
-    post.tags.includes(tag)
-  );
+  db.query(sql, (err, results) => {
+    if (err) 
+    return res.status(500).json({ error: "Errore del server" });
 
-  res.json(filteredPosts); /**Restituiamo solo i post filtrati, in formato JSON**/
+    res.json(results); /**Restituiamo i risultati in formato JSON*/
+  });
 }
 
 /**SHOW*/
